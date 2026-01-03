@@ -21,12 +21,16 @@ The project utilizes the BraTS 2021 Dataset, which is significantly larger than 
     * **T2:** Edema
     * **FLAIR:** Suppressed Cerebrospinal Fluid
 * **Split:** The first 1,000 patients were allocated for training, with the remaining ~251 used for validation.
+<img width="598" height="224" alt="image" src="https://github.com/user-attachments/assets/cda0f515-636d-4d7f-a985-f4b40ee90c8d" />
 
 ### 2. Preprocessing & Memory Optimization
 To standardize inputs and maximize training efficiency within the 8GB VRAM envelope:
 
 1.  **Z-Score Normalization:** We implemented a custom normalization function (`normalize_modality`) that calculates statistics solely on non-zero brain regions. This prevents the large volume of background air from skewing the intensity distribution and destabilizing gradients.
 2.  **Balanced Sampling:** A `get_tumor_centered_coords` logic was implemented to ensure 50% of training patches are centered on tumor regions, counteracting the inherent class imbalance where healthy tissue vastly outweighs tumor voxels.
+
+<img width="469" height="374" alt="image" src="https://github.com/user-attachments/assets/79130272-0a53-48f8-9d1e-4b2fe7014618" />
+
 
 ---
 
@@ -73,6 +77,9 @@ We implemented a 3D Residual U-Net designed for volumetric efficiency. The netwo
 * **Residual Blocks:** Standard convolutions were replaced with Residual Blocks (two $3 \times 3 \times 3$ convolutions + skip connection) to facilitate gradient flow.
 * **Instance Normalization:** We specifically chose Instance Normalization over Batch Normalization. Batch Norm relies on batch statistics (mean/variance) which are highly noisy when the batch size is small (e.g., 4). Instance Norm calculates statistics per sample, making it independent of batch size and ideal for our constrained hardware setup.
 
+<img width="687" height="409" alt="image" src="https://github.com/user-attachments/assets/9d6b0315-c7bf-404c-a150-28fd39727b92" />
+
+
 ### 2. Training Hyperparameters
 * **Optimizer:** AdamW ($LR=1e^{-4}$, Weight Decay $=1e^{-5}$)
 * **Scheduler:** Cosine Annealing LR ($T\_max=100$)
@@ -83,7 +90,10 @@ We implemented a 3D Residual U-Net designed for volumetric efficiency. The netwo
 ## V. Experimental Results
 
 ### 1. Training Dynamics
-The training loss demonstrated a sharp and consistent decline from >4.0 to ~1.3, indicating successful volumetric feature learning. [cite_start]Validation loss remained stable without divergence, confirming the efficacy of the regularization strategies[cite: 1].
+The training loss demonstrated a sharp and consistent decline from >4.0 to ~1.3, indicating successful volumetric feature learning. Validation loss remained stable without divergence, confirming the efficacy of the regularization strategies.
+
+<img width="916" height="508" alt="image" src="https://github.com/user-attachments/assets/79f75ca4-9392-4022-affd-b33c3a8a5a19" />
+
 
 ### 2. Quantitative Evaluation
 The model was evaluated on the validation set of ~251 patients. Analysis of the `final_scores.csv` data reveals:
@@ -91,6 +101,9 @@ The model was evaluated on the validation set of ~251 patients. Analysis of the 
 * **Whole Tumor (WT):** Achieved a Median Dice Score of 0.952 (Mean: $0.923 \pm 0.08$), indicating excellent boundary detection for surgical planning.
 * **Tumor Core (TC):** Achieved a Median Dice Score of 0.941 (Mean: $0.895 \pm 0.12$) showing high precision in identifying the solid tumor mass.
 * **Enhancing Tumor (ET):** Achieved a Median Dice Score of 0.897 (Mean: $0.842 \pm 0.15$). This remains the most challenging region due to variable contrast uptake, yet the score confirms the effectiveness of Deep Supervision.
+
+<img width="600" height="500" alt="image" src="https://github.com/user-attachments/assets/3c200da2-ef5d-43c9-9cfe-771687046299" />
+
 
 ### 3. Case Analysis
 Specific patient results highlight the model's capabilities and limitations:
