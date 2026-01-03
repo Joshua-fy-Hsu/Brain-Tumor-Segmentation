@@ -1,0 +1,5 @@
+# Ignore data sets
+data/
+
+# Ignore python cache
+__pycache__/
