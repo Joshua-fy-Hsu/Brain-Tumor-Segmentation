@@ -29,7 +29,7 @@ To standardize inputs and maximize training efficiency within the 8GB VRAM envel
 1.  **Z-Score Normalization:** We implemented a custom normalization function (`normalize_modality`) that calculates statistics solely on non-zero brain regions. This prevents the large volume of background air from skewing the intensity distribution and destabilizing gradients.
 2.  **Balanced Sampling:** A `get_tumor_centered_coords` logic was implemented to ensure 50% of training patches are centered on tumor regions, counteracting the inherent class imbalance where healthy tissue vastly outweighs tumor voxels.
 
-<img width="469" height="374" alt="image" src="https://github.com/user-attachments/assets/79130272-0a53-48f8-9d1e-4b2fe7014618" />
+<img width="400" height="300" alt="image" src="https://github.com/user-attachments/assets/79130272-0a53-48f8-9d1e-4b2fe7014618" />
 
 
 ---
